@@ -33,6 +33,23 @@ router.get("/:id", async (req, res) => {
   try {
     const user = await User.findById(req.params.id).lean().exec();
 
+    if (!user) {
+      return res
+        .status(404)
+        .send({ data: user, message: "error", error: "User Not found.." });
+    }
+    return res.status(200).send({ data: user, message: "success" });
+  } catch (error) {
+    console.log("error:", error);
+    res.status(500).send({ data: [], message: "error", error: error.message });
+  }
+});
+// for remove single user by id
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id).lean().exec();
+
     return res.status(200).send({ data: user, message: "success" });
   } catch (error) {
     console.log("error:", error);
@@ -76,12 +93,17 @@ router.get("/:id/addresses", async (req, res) => {
 
 router.patch("/:id/addresses/create", async (req, res) => {
   try {
-    const user = await User.updateOne(
+    const test = await User.updateOne(
       { _id: req.params.id },
       { $push: { addresses: req.body } }
     );
-
-    return res.status(200).send({ data: user, message: "success" });
+    if (test.acknowledged === true) {
+      const user = await User.findById(req.params.id).lean().exec();
+      return res.status(201).send({ data: user.addresses, message: "success" });
+    }
+    return res
+      .status(404)
+      .send({ data: test, message: "error", error: "something went wrong" });
   } catch (error) {
     console.log("error:", error);
     res.status(500).send({ data: [], message: "error", error: error.message });
@@ -90,11 +112,24 @@ router.patch("/:id/addresses/create", async (req, res) => {
 
 router.patch("/:id/addresses/:idx/edit", async (req, res) => {
   try {
-    const user = await User.findById(req.params.id);
-    console.log("id: ", req.params.id, "idx: ", req.paramas.idx);
-    return res.status(200).send({ data: user, message: "success" });
+    const test = await User.updateOne(
+      { _id: req.params.id, "addresses._id": req.params.idx },
+      { $set: { "addresses.$": req.body } }
+    );
+
+    let idx = req.params.idx;
+    if (test.acknowledged === true) {
+      const user = await User.findById(req.params.id).lean().exec();
+
+      return res.status(201).send({ data: user.addresses, message: "success" });
+    }
+    return res
+      .status(404)
+      .send({ data: test, message: "error", error: "something went wrong" });
   } catch (error) {
     console.log("error:", error);
     res.status(500).send({ data: [], message: "error", error: error.message });
   }
 });
+
+module.exports = router;
