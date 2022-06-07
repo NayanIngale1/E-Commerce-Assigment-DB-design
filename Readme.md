@@ -8,7 +8,7 @@
 
 ---
 
-### Note : This API is not deploy yet. So if you want to use it, clone the repository, install node modules by `npm install` and run server side on local terminal you will get home end point as : `http://locahost:5555/`. Now you can use the following endpoints
+### Note : This API is not deploy yet. So if you want to use this Schema Design, clone the repository, install node modules by `npm install` and run server side on local terminal you will get home end point as : `http://locahost:5555/`. Now you can use the following endpoints
 
 ---
 
