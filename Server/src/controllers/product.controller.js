@@ -46,7 +46,7 @@ router.get("/:id", async (req, res) => {
 });
 // for remove single product by id
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id/delete", async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id).lean().exec();
 

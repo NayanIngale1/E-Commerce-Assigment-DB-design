@@ -46,7 +46,7 @@ router.get("/:id", async (req, res) => {
 });
 // for remove single brand by id
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id/delete", async (req, res) => {
   try {
     const brand = await Brand.findByIdAndDelete(req.params.id).lean().exec();
 
