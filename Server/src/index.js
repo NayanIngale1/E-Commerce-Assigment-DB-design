@@ -7,8 +7,8 @@ app.use(cors());
 app.use(express.json());
 
 const userController = require("./controllers/user.controller");
-const brandController = require("./controllers/brand.controller")
-
+const brandController = require("./controllers/brand.controller");
+const productController = require("./controllers/product.controller");
 
 app.get("/", (req, res) => {
   res.status(200).send("<h1>Welcome to E-Commerce DB API</h1>");
@@ -16,6 +16,6 @@ app.get("/", (req, res) => {
 
 app.use("/users", userController);
 app.use("/brands", brandController);
-
+app.use("/products", productController);
 
 module.exports = app;
